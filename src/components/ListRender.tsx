@@ -1,7 +1,7 @@
 import React, {Dispatch, SetStateAction} from 'react';
-import {Image, Text, TouchableOpacity, View} from 'react-native';
+import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {SelectedCoinProps} from '../interfaces/dataInterface';
-import ArrowRight from '../assets/images/arrow-right.svg'
+import ArrowRight from '../assets/images/arrow-right.svg';
 
 interface ListRenderProps {
   name?: string;
@@ -23,36 +23,38 @@ export const ListRender = ({
   setData,
 }: ListRenderProps) => {
   return (
-    <TouchableOpacity
-      style={{
-        flexDirection: 'row',
-        padding: 20,
-        width: '100%',
-        justifyContent: 'space-between',
-      }}
-      onPress={() => {
-        setSelectedCoin({name, image});
-        setIsVisible(false);
-        setData((data: any) => ({
-          ...data,
-          input_currency: blockchain,
-        }));
-      }}>
-      <View
+    <ScrollView>
+      <TouchableOpacity
         style={{
           flexDirection: 'row',
-          gap: 10,
-          alignItems: 'center',
+          padding: 20,
+          width: '100%',
+          justifyContent: 'space-between',
+        }}
+        onPress={() => {
+          setSelectedCoin({name, image});
+          setIsVisible(false);
+          setData((data: any) => ({
+            ...data,
+            input_currency: blockchain,
+          }));
         }}>
-        <Image source={{uri: image}} width={35} height={35} />
-        <View>
-          <Text style={{color: 'black'}}>{name}</Text>
-          <Text style={{color: '#647184', fontSize: 12}}>{symbol}</Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            gap: 10,
+            alignItems: 'center',
+          }}>
+          <Image source={{uri: image}} width={35} height={35} />
+          <View>
+            <Text style={{color: 'black'}}>{name}</Text>
+            <Text style={{color: '#647184', fontSize: 12}}>{symbol}</Text>
+          </View>
         </View>
-      </View>
-      <View>
-        <ArrowRight />
-      </View>
-    </TouchableOpacity>
+        <View>
+          <ArrowRight />
+        </View>
+      </TouchableOpacity>
+    </ScrollView>
   );
 };

@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  ActivityIndicator,
 } from 'react-native';
 import {FormData} from '../interfaces/dataInterface';
 import {CustomSelectModal} from '../components/CustomSelectModal';
@@ -47,7 +48,9 @@ export const FormScreen = () => {
   };
 
   const handleSubmit = async () => {
+    setIsLoading(true);
     const resp = await sendForm(data);
+    setIsLoading(false);
     setIdentifier(resp.data.identifier);
     navigation.navigate('CheckoutScreen');
   };
@@ -65,6 +68,8 @@ export const FormScreen = () => {
             keyboardType="numeric"
             onChangeText={text => handleChange('expected_output_amount', text)}
             value={data.expected_output_amount}
+            placeholder="Añanade importe a pagar"
+            placeholderTextColor={'#647184'}
           />
         </View>
 
@@ -76,6 +81,8 @@ export const FormScreen = () => {
             style={styles.textInput}
             onChangeText={text => handleChange('notes', text)}
             value={data.notes}
+            placeholder="Añanade descripción del pago"
+            placeholderTextColor={'#647184'}
           />
         </View>
 
@@ -83,7 +90,11 @@ export const FormScreen = () => {
           style={styles.button}
           disabled={isDisabled}
           onPress={() => handleSubmit()}>
-          <Text style={{...styles.subtitle, color: '#fff'}}>Continuar</Text>
+          {isLoading ? (
+            <ActivityIndicator color={"#fff"}/>
+          ) : (
+            <Text style={{...styles.subtitle, color: '#fff'}}>Continuar</Text>
+          )}
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -100,6 +111,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 36,
     fontWeight: 'bold',
+    color: '#000',
   },
   innerContainer: {
     justifyContent: 'flex-start',
@@ -110,12 +122,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
+    color: '#000',
   },
   textInput: {
     borderColor: '#c0ccda',
     borderWidth: 1,
     borderRadius: 10,
     padding: 20,
+    color: '#000',
   },
   downContainer: {
     justifyContent: 'flex-start',

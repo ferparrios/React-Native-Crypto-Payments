@@ -16,7 +16,6 @@ import {useNavigation} from '@react-navigation/native';
 import Timer from '../assets/images/timer.svg';
 import MetamaskLogo from '../assets/images/metamask-logo.svg';
 
-
 export const CheckoutScreen = () => {
   const {identifier, setSuccess} = useContext(DataContext);
 
@@ -36,20 +35,20 @@ export const CheckoutScreen = () => {
     getInfo();
 
     const socket = new WebSocket(
-      `wss://payments.pre-bnvo.com/ws/${identifier}`
+      `wss://payments.pre-bnvo.com/ws/${identifier}`,
     );
 
-    socket.onopen = (event) => {
+    socket.onopen = event => {
       console.log(event);
-      console.log("Connected");
+      console.log('Connected');
     };
 
-    socket.onclose = (event) => {
+    socket.onclose = event => {
       console.log(event);
-      console.log("Disconnected");
+      console.log('Disconnected');
     };
 
-    socket.onmessage = (event) => {
+    socket.onmessage = event => {
       const payload = JSON.parse(event.data);
       // No responde se completa por el formato del address y no se puede completar el pago
       if (payload.success) {
@@ -58,10 +57,10 @@ export const CheckoutScreen = () => {
       console.log(payload);
     };
 
-    socket.onerror = (error) => {
-      console.log(error)
-      setSuccess(false)
-    }
+    socket.onerror = error => {
+      console.log(error);
+      setSuccess(false);
+    };
   }, []);
 
   const formattedDate = (date: any) => {
@@ -73,7 +72,7 @@ export const CheckoutScreen = () => {
       navigation.navigate('FinishScreen');
     }
     return (
-      <Text>
+      <Text style={styles.descriptionText}>
         {minutes}:{seconds}
       </Text>
     );
@@ -139,7 +138,14 @@ export const CheckoutScreen = () => {
                   setIsActive(true);
                   setQrPayment(true);
                 }}>
-                <Text style={isActive && styles.buttonTextColor}>SmartQR</Text>
+                <Text
+                  style={
+                    isActive
+                      ? styles.buttonTextColorActive
+                      : styles.buttonTextColor
+                  }>
+                  SmartQR
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={!isActive ? styles.buttonActive : styles.button}
@@ -147,7 +153,14 @@ export const CheckoutScreen = () => {
                   setIsActive(false);
                   setQrPayment(false);
                 }}>
-                <Text style={!isActive && styles.buttonTextColor}>Web3</Text>
+                <Text
+                  style={
+                    !isActive
+                      ? styles.buttonTextColorActive
+                      : styles.buttonTextColor
+                  }>
+                  Web3
+                </Text>
               </TouchableOpacity>
             </View>
             <View style={styles.qrMetamasContainer}>
@@ -181,6 +194,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 10,
+    color: '#000',
   },
   descriptionContainer: {
     flexDirection: 'row',
@@ -190,6 +204,7 @@ const styles = StyleSheet.create({
   descriptionText: {
     fontSize: 16,
     marginBottom: 10,
+    color: '#647184',
   },
   cardContainer: {
     justifyContent: 'center',
@@ -226,6 +241,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   buttonTextColor: {
+    color: '#000',
+    fontWeight: 'bold',
+  },
+  buttonTextColorActive: {
     color: '#fff',
     fontWeight: 'bold',
   },
@@ -234,7 +253,6 @@ const styles = StyleSheet.create({
   },
   countdownContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
   },

@@ -22,7 +22,7 @@ export const FinishScreen = () => {
         <Text style={styles.subtitleText}>{
           success ? 'Pago Completado' : 'Pago Cancelado'
         }</Text>
-        <Text>
+        <Text style={styles.descriptionText}>
           Lorem ipsum dolor sit amet consectetur. Laoreet blandit auctor et
           varius dolor elit facilisi enim. Nulla ut ut eu nunc.
         </Text>
@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 10,
+    color: "#000"
   },
   button: {
     backgroundColor: '#055ac5',
@@ -72,4 +73,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
   },
+  descriptionText: {
+    color: "#647184"
+  }
 });

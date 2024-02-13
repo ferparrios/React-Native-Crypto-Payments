@@ -11,8 +11,9 @@ import {
 import {Currencies, SelectedCoinProps} from '../interfaces/dataInterface';
 import {getCoins} from '../api/cryptoApi';
 import {ListRender} from './ListRender';
-import CloseButton from '../assets/images/close.svg'
-import ArrowDown from '../assets/images/arrow-down.svg'
+import CloseButton from '../assets/images/close.svg';
+import ArrowDown from '../assets/images/arrow-down.svg';
+import SeachIcon from '../assets/images/search-normal.svg';
 
 interface Props {
   setData: (data: any) => void;
@@ -32,10 +33,8 @@ export const CustomSelectModal = ({setData}: Props) => {
   useEffect(() => {
     const loadCoins = async () => {
       const resp = await getCoins();
-      // console.log(JSON.stringify(resp.data, null, 2));
       setCoins(resp.data);
       setFilteredCoins(resp.data);
-      // console.log('Coins: ', coins);
     };
     loadCoins();
   }, []);
@@ -64,7 +63,7 @@ export const CustomSelectModal = ({setData}: Props) => {
           onPress={() => setIsVisible(true)}>
           <View style={styles.imageCoinContainer}>
             <Image source={{uri: selectedCoin.image}} width={35} height={35} />
-            <Text>{selectedCoin.name}</Text>
+            <Text style={styles.selectedCoinText}>{selectedCoin.name}</Text>
           </View>
           <View>
             <ArrowDown />
@@ -75,49 +74,37 @@ export const CustomSelectModal = ({setData}: Props) => {
       {isVisible && (
         <View style={styles.modalContainer}>
           <View style={styles.modalTitleContainer}>
-            <Text
-              style={styles.seleccionarText}>
-              Seleccionar criptomoneda
-            </Text>
+            <Text style={styles.seleccionarText}>Seleccionar criptomoneda</Text>
             <TouchableOpacity onPress={() => setIsVisible(false)}>
               <CloseButton />
             </TouchableOpacity>
           </View>
 
-          <View
-            style={{
-              width: '90%',
-            }}>
+          <View style={styles.searchContainer}>
+            <SeachIcon style={styles.searchIcon} />
             <TextInput
-              style={{
-                flexDirection: 'row',
-                borderColor: '#c0ccda',
-                borderWidth: 1,
-                borderRadius: 10,
-                padding: 20,
-                justifyContent: 'space-between',
-              }}
+              style={styles.searchInput}
               value={searchItem}
               onChangeText={text => searchFilterItem(text)}
+              placeholder="Buscar"
+              placeholderTextColor={'#647184'}
             />
           </View>
 
-          <View>
-            <FlatList
-              data={filteredCoins}
-              renderItem={({item}) => (
-                <ListRender
-                  name={item.name}
-                  image={item.image}
-                  symbol={item.symbol}
-                  blockchain={item.blockchain}
-                  setSelectedCoin={setSelectedCoin}
-                  setIsVisible={setIsVisible}
-                  setData={setData}
-                />
-              )}
-            />
-          </View>
+          <FlatList
+            data={filteredCoins}
+            renderItem={({item}) => (
+              <ListRender
+                name={item.name}
+                image={item.image}
+                symbol={item.symbol}
+                blockchain={item.blockchain}
+                setSelectedCoin={setSelectedCoin}
+                setIsVisible={setIsVisible}
+                setData={setData}
+              />
+            )}
+          />
         </View>
       )}
     </>
@@ -132,6 +119,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
+    color: '#000',
   },
   coinContainer: {
     flexDirection: 'row',
@@ -140,7 +128,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 20,
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   imageCoinContainer: {
     flexDirection: 'row',
@@ -152,7 +140,7 @@ const styles = StyleSheet.create({
     zIndex: 99,
     backgroundColor: '#fff',
     width: '100%',
-    height: '70%',
+    height: '100%',
     alignItems: 'center',
     paddingTop: '10%',
     marginHorizontal: 20,
@@ -177,5 +165,27 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
-  }
+    color: '#000',
+  },
+  selectedCoinText: {
+    color: '#647184',
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    width: '90%',
+    alignItems: 'center',
+  },
+  searchInput: {
+    borderColor: '#c0ccda',
+    borderWidth: 1,
+    width: '100%',
+    borderRadius: 10,
+    padding: 20,
+    paddingLeft: 60,
+  },
+  searchIcon: {
+    position: 'absolute',
+    zIndex: 99,
+    marginLeft: 10,
+  },
 });
